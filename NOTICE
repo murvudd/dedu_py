@@ -1,0 +1,24 @@
+Project Name: murvudd/dedu_py
+Copyright 2026 Michał Trojnarski Full Stack Ai; trojnarski.michal@gmail.com
+
+This product includes software developed by the Apache Software Foundation
+(http://www.apache.org/).
+
+This product includes or utilizes the following third-party components:
+
+1. Ubuntu Base Image
+   - Distributed under various licenses (mostly GNU GPL).
+   - Source: https://hub.docker.com/_/ubuntu
+
+2. Python (PSF License Agreement)
+   - Copyright (c) 2001-2026 Python Software Foundation.
+   - All Rights Reserved.
+
+3. PyMongo (Apache License 2.0)
+   - Copyright (c) 2009-present MongoDB, Inc.
+
+4. MongoDB Server (SSPL)
+   - This project may interact with MongoDB Server.
+   - Note: MongoDB Server is licensed under the Server Side Public License (SSPL).
+     Your use of this project to connect to a MongoDB instance must comply
+     with the SSPL terms where applicable.

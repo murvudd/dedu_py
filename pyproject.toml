@@ -1,0 +1,7 @@
+[project]
+name = "dedu-py"
+version = "0.1.0"
+description = "**dedu.py** to ultra-szybkie i absurdalnie proste narzędzie open-source do deduplikacji plików. Jeśli Twój dysk pęka w szwach od kopii tych samych memów i dokumentów, jesteś w dobrym miejscu."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
