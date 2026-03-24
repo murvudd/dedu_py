@@ -7,8 +7,17 @@ authors = [
     {name = "murvudd", email = "trojnarski.michal@gmail.com"}
 ]
 requires-python = ">=3.14"
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"] # E (Error), F (Pyflakes), I (Isort - sortowanie importów)
+fixable = ["ALL"]
+
 dependencies = []
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
 
 [tool.setuptools.dynamic]
 version = {file = "VERSION"}
@@ -23,3 +32,4 @@ dedu-py = "dedupy.__init__:main"
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
+

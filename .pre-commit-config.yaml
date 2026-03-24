@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0 # Sprawdź najnowszą wersję, v5.0.0 jest stabilna w 2026
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.9.0 # Wersja ruff
+    hooks:
+      - id: ruff
+        args: [ --fix ] # Automatycznie naprawia co się da przy commicie
+      - id: ruff-format # Odpowiednik Blacka, wbudowany w Ruffa

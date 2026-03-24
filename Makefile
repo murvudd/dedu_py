@@ -9,6 +9,7 @@ NEXT_VERSION := $(shell echo $(CURRENT_VERSION) | awk -F. '{print $$1"."$$2"."$$
 
 # Budowanie paczki .whl i .tar.gz (zamiast obrazu Docker)
 build:
+	@export CURRENT_VERSION=`cat VERSION`
 	@echo "Building dedu-py version $(CURRENT_VERSION)..."
 	uv build
 
@@ -19,6 +20,7 @@ bump:
 
 # Git commit i tagowanie (identycznie jak w Twoim przykładzie)
 git-tag:
+	@export CURRENT_VERSION=`cat VERSION`
 	@echo "Creating Git tag v$(CURRENT_VERSION)..."
 	git add $(VERSION_FILE)
 	git commit -m "chore: bump version to $(CURRENT_VERSION)"
