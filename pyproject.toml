@@ -1,7 +1,22 @@
 [project]
 name = "dedu-py"
 version = "0.1.0"
-description = "**dedu.py** to ultra-szybkie i absurdalnie proste narzędzie open-source do deduplikacji plików. Jeśli Twój dysk pęka w szwach od kopii tych samych memów i dokumentów, jesteś w dobrym miejscu."
+description = "Ultra-fast and ridiculously simple open-source file deduplication tool."
 readme = "README.md"
+authors = [
+    {name = "murvudd", email = "trojnarski.michal@gmail.com"}
+]
 requires-python = ">=3.14"
 dependencies = []
+license = { text = "Apache-2.0" }
+
+[project.urls]
+Homepage = "https://github.com/murvudd/dedu-py"
+Issues = "https://github.com/murvudd/dedu-py/issues"
+
+[project.scripts]
+dedu-py = "dedupy.__init__:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

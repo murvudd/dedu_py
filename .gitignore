@@ -6,6 +6,8 @@ dist/
 wheels/
 *.egg-info
 
+# local dev
 .idea/
-# Virtual environments
 .venv/
+uv.lock
+
