@@ -13,29 +13,33 @@ logging.getLogger(__name__).addHandler(logging.NullHandler())
 
 
 def dir_list(source: Path) -> list[Path]:
-    assert source.is_dir(), ValueError(f"{source} is not a directory")
+    if not source.is_dir():
+        raise ValueError(f"{source} is not a directory")
     _list = os.listdir(source)
+    if len(_list) == 0:
+        return []
     res = [source / x for x in _list]
     return res
 
 
-def root_list(source: Path) -> list[Path]:
+def recursive_dir_list(source: Path) -> list[Path]:
     """
-
     :param source: Path of root directory, for deduplication
     :return: list[Path] all and only files in root directory
     """
-    assert source.is_dir(), ValueError(f"{source} is not a directory")
-    _list = dir_list(source)
+    if not source.is_dir():
+        raise ValueError(f"{source} is not a directory")
+    _list = os.listdir(source)
+    if len(_list) == 0:
+        return []
+    res = [source / x for x in _list]
+    _files = [x for x in res if x.is_file()]
+    _dirs = [x for x in res if x.is_dir()]
+    if len(_dirs) > 0:
+        for dir in _dirs:
+            _files.extend(recursive_dir_list(dir))
 
-    _files = [Path(x).absolute() for x in _list if x.is_file()]
-    _directories = [Path(x).absolute() for x in _list if x.is_dir()]
-    _files.extend(
-        [root_list(Path(x).absolute()) for x in _directories]
-    )
-    logging.debug(f"files: {_files}")
     return _files
-
 
 
 
