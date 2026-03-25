@@ -7,9 +7,7 @@ NEXT_VERSION := $(shell echo $(CURRENT_VERSION) | awk -F. '{print $$1"."$$2"."$$
 
 .PHONY: build bump git-tag release
 
-# Budowanie paczki .whl i .tar.gz (zamiast obrazu Docker)
 build:
-	@export CURRENT_VERSION=`cat VERSION`
 	@echo "Building dedu-py version $(CURRENT_VERSION)..."
 	uv build
 
@@ -20,13 +18,13 @@ bump:
 
 # Git commit i tagowanie (identycznie jak w Twoim przykładzie)
 git-tag:
-	@export CURRENT_VERSION=`cat VERSION`
-	@echo "Creating Git tag v$(CURRENT_VERSION)..."
 	git add $(VERSION_FILE)
+	@export CURRENT_VERSION=`cat VERSION`
+	@echo "CURRENT_VERSION: $(CURRENT_VERSION)"
 	git commit -m "chore: bump version to $(CURRENT_VERSION)"
 	git tag -a "v$(CURRENT_VERSION)" -m "Release v$(CURRENT_VERSION)"
 	git push origin main --tags
 
 # Pełny cykl: podbijasz wersję -> budujesz paczkę -> tagujesz w git
 release: bump build git-tag
-	@echo "Release $(CURRENT_VERSION) finished. Ready for PyPI or GitHub Release."
+	@echo "Release $(NEXT_VERSION) finished. Ready for PyPI or GitHub Release."
