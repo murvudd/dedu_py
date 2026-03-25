@@ -9,6 +9,4 @@ from src.dedupy.__init__ import main
 if __name__ == "__main__":
     argv = argv[1:]
 
-    asyncio.run(
-        main(source_dir=Path(argv[0]).absolute(), dry_run=True)
-    )
+    asyncio.run(main(source_dir=Path(argv[0]).absolute(), dry_run=True))

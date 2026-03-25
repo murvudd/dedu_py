@@ -10,4 +10,3 @@ wheels/
 .idea/
 .venv/
 uv.lock
-
