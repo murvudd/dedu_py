@@ -1,8 +1,3 @@
-import logging
-import os
+from .core import main
 
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-
-def main():
-    print("🍑 dedu.py: Scanning for duplicates...")
+__all__ = ["main"]
