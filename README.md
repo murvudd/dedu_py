@@ -29,6 +29,3 @@ Masz pomysł na poprawkę? Pull requesty mile widziane. Pamiętaj tylko o zachow
 ---
 #### Created with 🍑 by [murvudd](https://www.linkedin.com/in/mike-trojnarski/).
 #### Copyright © 2026 Michał Trojnarski Full Stack Ai
-
-
-

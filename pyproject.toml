@@ -4,25 +4,60 @@ dynamic = ["version"]
 description = "Ultra-fast and ridiculously simple open-source file deduplication tool."
 readme = "README.md"
 authors = [
-    {name = "murvudd", email = "trojnarski.michal@gmail.com"}
+    { name = "murvudd", email = "trojnarski.michal@gmail.com" }
 ]
 requires-python = ">=3.14"
 dependencies = [
     "ruff>=0.15.7",
 ]
-[tool.ruff]
-line-length = 120
-target-version = "py314"
-
-[tool.ruff.lint]
-select = ["E", "F", "I"] # E (Error), F (Pyflakes), I (Isort - sortowanie importów)
-fixable = ["ALL"]
 
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 
+
+[tool.ruff]
+line-length = 120
+target-version = "py314"
+[tool.ruff.format]
+# Use double quotes for strings (Black default)
+quote-style = "double"
+
+# Use spaces for indentation (Black default)
+indent-style = "space"
+
+# Respect magic trailing comma for Black compatibility
+skip-magic-trailing-comma = false
+
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort (import sorting)
+    "B", # flake8-bugbear (common bugs)
+    "C4", # flake8-comprehensions (better list/dict/set comprehensions)
+    "UP", # pyupgrade (upgrade syntax for newer Python)
+    "SIM", # flake8-simplify (simplification suggestions)
+]
+fixable = ["ALL"]
+# Ignore these specific rules
+ignore = [
+    "E501", # line too long (handled by formatter)
+    "B008", # do not perform function calls in argument defaults (common in FastAPI/Airflow)
+]
+
+# Allow unused variables when underscore-prefixed
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+[tool.ruff.lint.per-file-ignores]
+# Ignore specific rules in specific files
+"__init__.py" = ["F401"]  # Unused imports (often intentional in __init__)
+"tests/*" = ["S101"]      # Use of assert (allowed in tests)
+
+
+
 [tool.setuptools.dynamic]
-version = {file = "VERSION"}
+version = { file = "VERSION" }
 
 [project.urls]
 Homepage = "https://github.com/murvudd/dedu-py"
@@ -34,4 +69,3 @@ dedu-py = "dedupy.__init__:main"
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
-
