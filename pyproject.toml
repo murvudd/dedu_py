@@ -7,6 +7,9 @@ authors = [
     {name = "murvudd", email = "trojnarski.michal@gmail.com"}
 ]
 requires-python = ">=3.14"
+dependencies = [
+    "ruff>=0.15.7",
+]
 [tool.ruff]
 line-length = 120
 target-version = "py314"
@@ -15,7 +18,6 @@ target-version = "py314"
 select = ["E", "F", "I"] # E (Error), F (Pyflakes), I (Isort - sortowanie importów)
 fixable = ["ALL"]
 
-dependencies = []
 license = "Apache-2.0"
 license-files = ["LICENSE"]
 
