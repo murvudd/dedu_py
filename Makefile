@@ -5,7 +5,7 @@ CURRENT_VERSION := $(shell cat $(VERSION_FILE))
 # Użyłem awk, który obsłuży format semver (np. 0.1.0 -> 0.1.1)
 NEXT_VERSION := $(shell echo $(CURRENT_VERSION) | awk -F. '{print $$1"."$$2"."$$3+1}')
 
-.PHONY: build bump git-tag release
+.PHONY: build bump git-tag release ruff
 
 build:
 	@echo "Building dedu-py version $(CURRENT_VERSION)..."
@@ -28,3 +28,8 @@ git-tag:
 # Pełny cykl: podbijasz wersję -> budujesz paczkę -> tagujesz w git
 release: bump build git-tag
 	@echo "Release $(NEXT_VERSION) finished. Ready for PyPI or GitHub Release."
+
+ruff:
+	@echo "running lint and format using ruff"
+	ruff check --fix ./
+	ruff format ./
