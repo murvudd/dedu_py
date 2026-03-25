@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import os
 import tempfile
@@ -42,6 +43,28 @@ def recursive_dir_list(source: Path) -> list[Path]:
     return _files
 
 
+async def hash_map(file_list: list[Path]) -> dict[Path, str]:
+    """
+
+    :param file_list:
+    :return: dict[Path, str] key: file path, value: md5 hash
+    """
+    raise NotImplementedError
+    return {}
+
+
+async def hash_file(file_path: Path) -> str:
+    if isinstance(file_path, Path):
+        pass
+    else:
+        file_path = Path(file_path)
+    if not file_path.is_file():
+        raise FileNotFoundError(f"{file_path} is not a file")
+
+    with open(file_path, "rb") as f:
+        md5 = hashlib.md5(f.read()).hexdigest()
+        return md5
+
 
 async def main(
     source_dir: Path = None,
@@ -68,9 +91,10 @@ async def main(
     temp_dir = tempfile.mkdtemp()
     logging.debug(f"temp_dir: {temp_dir}")
 
-    dir_list = root_list(source_dir)
+    all_files_in_directory: list[Path] = recursive_dir_list(source_dir)
+    await hash_map(all_files_in_directory)
+
     #
-    # dir_list = os.listdir(source_dir)
     logging.debug(f"dir_list: {dir_list}")
 
     print("🍑 dedu.py: Scanning for duplicates...")
