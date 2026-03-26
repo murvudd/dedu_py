@@ -79,7 +79,7 @@ Homepage = "https://github.com/murvudd/dedu-py"
 Issues = "https://github.com/murvudd/dedu-py/issues"
 
 [project.scripts]
-dedu-py = "dedupy.__init__:main"
+dedu-py = "dedupy.main:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

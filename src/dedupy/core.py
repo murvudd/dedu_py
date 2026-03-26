@@ -54,6 +54,7 @@ def save_report(duplicates: dict[str, list[str]], report_path: Path = Path("dupl
 async def main(
     source_dir: Path = None,
     dry_run: bool = False,
+        report_path: Path = Path("duplicates.json"),
     max_concurrent: int = 20,
 ):
     """
@@ -83,6 +84,6 @@ async def main(
     duplicates = find_duplicates(dict_map_hash)
 
     logging.debug(f"duplicates: {duplicates}")
-    print(f" {len(duplicates)} duplicates found.")
-    save_report(duplicates)
+    print(f"#️⃣ {len(duplicates)} duplicates found.")
+    save_report(duplicates, report_path=report_path)
     #
