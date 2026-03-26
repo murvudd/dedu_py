@@ -1,0 +1,14 @@
+{
+    "06a8d719ed4611cbffcd81a395781d47": [
+        "tests/data/c.txt",
+        "tests/data/sub2/c.txt"
+    ],
+    "4f41243847da693a4f356c0486114bc6": [
+        "tests/data/b.txt",
+        "tests/data/sub2/b.txt"
+    ],
+    "258e88dcbd3cd44d8e7ab43f6ecb6af0": [
+        "tests/data/a.txt",
+        "tests/data/sub2/a.txt"
+    ]
+}

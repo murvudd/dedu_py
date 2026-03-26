@@ -10,3 +10,5 @@ wheels/
 .idea/
 .venv/
 uv.lock
+.coverage
+htmlcov/

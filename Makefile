@@ -19,10 +19,9 @@ bump:
 # Git commit i tagowanie (identycznie jak w Twoim przykładzie)
 git-tag:
 	git add $(VERSION_FILE)
-	@export CURRENT_VERSION=`cat VERSION`
-	@echo "CURRENT_VERSION: $(CURRENT_VERSION)"
-	git commit -m "chore: bump version to $(CURRENT_VERSION)"
-	git tag -a "v$(CURRENT_VERSION)" -m "Release v$(CURRENT_VERSION)"
+	@echo "CURRENT_VERSION: $(NEXT_VERSION)"
+	git commit -m "chore: bump version to $(NEXT_VERSION)"
+	git tag -a "v$(NEXT_VERSION)" -m "Release v$(NEXT_VERSION)"
 	git push origin main --tags
 
 # Pełny cykl: podbijasz wersję -> budujesz paczkę -> tagujesz w git
