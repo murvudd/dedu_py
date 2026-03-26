@@ -12,3 +12,4 @@ wheels/
 uv.lock
 .coverage
 htmlcov/
+reports/
