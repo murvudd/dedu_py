@@ -1,45 +1,12 @@
+import json
 from pathlib import Path
 
 import pytest
 
-from dedupy.core import dir_list, hash_file, recursive_dir_list
+from dedupy.core import find_duplicates, recursive_dir_list, save_report
 
 
 class TestDirectoryListing:
-    @pytest.mark.parametrize(
-        "case",
-        [
-            {"dir": "", "raises": AttributeError},  # dir is not Path
-            {"dir": Path("non_existent_dir"), "raises": ValueError},
-            {"dir": Path("tests/data/sub1"), "expected": []},  # empty dir
-            {
-                "dir": Path("tests/data/sub2"),
-                "expected": [
-                    Path("tests/data/sub2/c.txt"),
-                    Path("tests/data/sub2/b.txt"),
-                    Path("tests/data/sub2/a.txt"),
-                ],
-            },
-            {
-                "dir": Path("tests/data"),
-                "expected": [
-                    Path("tests/data/sub1"),
-                    Path("tests/data/c.txt"),
-                    Path("tests/data/b.txt"),
-                    Path("tests/data/a.txt"),
-                    Path("tests/data/sub2"),
-                ],
-            },
-        ],
-    )
-    def test_dir_list(self, case):
-        if case.get("raises", None):
-            with pytest.raises(case["raises"]):
-                dir_list(case["dir"])
-        else:
-            result = dir_list(case["dir"])
-            assert sorted(result) == sorted(case["expected"])
-
     @pytest.mark.parametrize(
         "case",
         [
@@ -76,24 +43,34 @@ class TestDirectoryListing:
             assert sorted(result) == sorted(case["expected"])
 
 
-class TestFileHashing:
-    @pytest.mark.parametrize(
-        "case",
-        [
-            {"file": "", "raises": FileNotFoundError},
-            {"file": Path("non_existent_dir"), "raises": FileNotFoundError},
-            {"file": Path("tests/data/sub2/c.txt"), "expected": "06a8d719ed4611cbffcd81a395781d47"},
-            {"file": Path("tests/data/sub2/b.txt"), "expected": "4f41243847da693a4f356c0486114bc6"},
-            {"file": Path("tests/data/sub2/a.txt"), "expected": "258e88dcbd3cd44d8e7ab43f6ecb6af0"},
-            {"file": Path("tests/data/c.txt"), "expected": "06a8d719ed4611cbffcd81a395781d47"},
-            {"file": Path("tests/data/b.txt"), "expected": "4f41243847da693a4f356c0486114bc6"},
-            {"file": Path("tests/data/a.txt"), "expected": "258e88dcbd3cd44d8e7ab43f6ecb6af0"},
-        ],
-    )
-    async def test_file_hashing(self, case):
-        if case.get("raises", None):
-            with pytest.raises(case["raises"]):
-                await hash_file(case["file"])
-        else:
-            result = await hash_file(case["file"])
-            assert result == case["expected"]
+#
+
+
+class TestDuplicateLogic:
+    def test_find_duplicates_logic(self):
+        # Mockujemy dane wejściowe
+        mock_hashes = {
+            Path("a.txt"): "hash1",
+            Path("b.txt"): "hash1",  # Duplikat
+            Path("c.txt"): "hash2",  # Unikalny
+            Path("d.txt"): "hash3",
+            Path("e.txt"): "hash3",  # Kolejny duplikat
+        }
+
+        result = find_duplicates(mock_hashes)
+
+        assert len(result) == 2  # Tylko hash1 i hash3 powinny zostać
+        assert "hash1" in result
+        assert len(result["hash1"]) == 2
+        assert "hash2" not in result  # Unikalne pliki znikają
+
+    def test_save_report(self, tmp_path):
+        report_file = tmp_path / "test_report.json"
+        data = {"some_hash": ["file1.txt", "file2.txt"]}
+
+        path = save_report(data, report_file)
+
+        assert path.exists()
+        with open(path) as f:
+            loaded = json.load(f)
+            assert loaded == data

@@ -1,26 +1,11 @@
-import hashlib
+import json
 import logging
 import os
 import tempfile
+from collections import defaultdict
 from pathlib import Path
 
-DEBUG = os.environ.get("DEBUG", "")
-DEBUG = DEBUG.lower() == "true"
-
-log_lvl = logging.DEBUG if DEBUG else logging.INFO
-
-logging.basicConfig(level=log_lvl, format="[%(levelname)s]::%(asctime)s::\t%(message)s")
-logging.getLogger(__name__).addHandler(logging.NullHandler())
-
-
-def dir_list(source: Path) -> list[Path]:
-    if not source.is_dir():
-        raise ValueError(f"{source} is not a directory")
-    _list = os.listdir(source)
-    if len(_list) == 0:
-        return []
-    res = [source / x for x in _list]
-    return res
+from .hash import hash_map
 
 
 def recursive_dir_list(source: Path) -> list[Path]:
@@ -43,32 +28,33 @@ def recursive_dir_list(source: Path) -> list[Path]:
     return _files
 
 
-async def hash_map(file_list: list[Path]) -> dict[Path, str]:
+def find_duplicates(hashes: dict[Path, str]) -> dict[str, list[str]]:
     """
-
-    :param file_list:
-    :return: dict[Path, str] key: file path, value: md5 hash
+    Grupuje ścieżki plików według ich hashy MD5.
+    Zwraca tylko te, które występują więcej niż raz.
     """
-    raise NotImplementedError
-    return {}
+    grouped = defaultdict(list)
+
+    # Grupowanie (odwracamy słownik)
+    for path, file_hash in hashes.items():
+        grouped[file_hash].append(str(path))
+
+    # Filtrowanie - zostawiamy tylko prawdziwe duplikaty
+    duplicates = {f_hash: paths for f_hash, paths in grouped.items() if len(paths) > 1}
+
+    return duplicates
 
 
-async def hash_file(file_path: Path) -> str:
-    if isinstance(file_path, Path):
-        pass
-    else:
-        file_path = Path(file_path)
-    if not file_path.is_file():
-        raise FileNotFoundError(f"{file_path} is not a file")
-
-    with open(file_path, "rb") as f:
-        md5 = hashlib.md5(f.read()).hexdigest()
-        return md5
+def save_report(duplicates: dict[str, list[str]], report_path: Path = Path("duplicates.json")):
+    with open(report_path, "w", encoding="utf-8") as f:
+        json.dump(duplicates, f, indent=4, ensure_ascii=True)
+    return report_path
 
 
 async def main(
     source_dir: Path = None,
     dry_run: bool = False,
+    max_concurrent: int = 20,
 ):
     """
 
@@ -84,17 +70,19 @@ async def main(
     if dry_run:
         print("🚫 💦 runnig dry; (NO FILE CHANGES)")
 
-    if DEBUG:
-        logging.getLogger("dedup").setLevel(logging.DEBUG)
-        logging.debug(f"🧑‍💻running in DEBUG mode == {DEBUG}")
-
     temp_dir = tempfile.mkdtemp()
     logging.debug(f"temp_dir: {temp_dir}")
+    print("🍑 dedu.py: Scanning directory ...")
 
     all_files_in_directory: list[Path] = recursive_dir_list(source_dir)
-    await hash_map(all_files_in_directory)
 
-    #
-    logging.debug(f"dir_list: {dir_list}")
-
+    print(f"📂  found {len(all_files_in_directory)} files.")
     print("🍑 dedu.py: Scanning for duplicates...")
+    dict_map_hash = await hash_map(all_files_in_directory, max_concurrent=max_concurrent)
+    print("#️⃣ hasing files complete.")
+    duplicates = find_duplicates(dict_map_hash)
+
+    logging.debug(f"duplicates: {duplicates}")
+    print(f" {len(duplicates)} duplicates found.")
+    save_report(duplicates)
+    #
