@@ -54,7 +54,7 @@ def save_report(duplicates: dict[str, list[str]], report_path: Path = Path("dupl
 async def main(
     source_dir: Path = None,
     dry_run: bool = False,
-        report_path: Path = Path("duplicates.json"),
+    report_path: Path = Path("duplicates.json"),
     max_concurrent: int = 20,
 ):
     """

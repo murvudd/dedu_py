@@ -7,6 +7,7 @@ wheels/
 *.egg-info
 
 # local dev
+.DS_Store
 .idea/
 .venv/
 uv.lock

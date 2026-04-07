@@ -32,3 +32,6 @@ ruff:
 	@echo "running lint and format using ruff"
 	ruff check --fix ./
 	ruff format ./
+
+test:
+	pytest
